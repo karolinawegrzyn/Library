@@ -18,6 +18,7 @@ public class Gui implements ActionListener{
     private User user;
     private Admin admin;
     Gui(){
+        init();
         loginMenu();
     }
     public void loginMenu(){
@@ -44,7 +45,6 @@ public class Gui implements ActionListener{
         jFrame.setLayout(null);
         jFrame.setVisible(true);
         jFrame.setResizable(false);
-        init();
     }
     public void init(){
         accounts=new LinkedList<>();
@@ -123,7 +123,7 @@ public class Gui implements ActionListener{
         else if(e.getSource()==addButton){
             catalog.getListOfAllBooks().add(new Book(addTitleTextField.getText(),Integer.parseInt(addISBNTextField.getText()),new Author(addAuthorTextField.getText())));
             catalog.getListOfAllBooks().get(catalog.getListOfAllBooks().size()-1).addCopy();
-            displayBooks();
+            addBookMenu();
         }
         else if(e.getSource()==reserveButton){
             reserveBook();
@@ -210,6 +210,12 @@ public class Gui implements ActionListener{
     }
 
     public void displayBooks(){
+        for(int i=0;i<catalog.getListOfAllBooks().size();i++){
+            Book temp=catalog.getListOfAllBooks().get(i);
+            for(int j=0;j<temp.getListOfAllCopies().size();j++){
+                copies.add(temp.getListOfAllCopies().get(j));
+            }
+        }
         Object[][] rows = new Object[copies.size()][];
         Object[] row;
         for(int i=0;i<copies.size();i++){
