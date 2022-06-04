@@ -19,32 +19,6 @@ public class Gui implements ActionListener{
     private Admin admin;
     Gui(){
         init();
-        loginMenu();
-    }
-    public void loginMenu(){
-        jFrame=new JFrame("login");
-        jFrame.setSize(500,250);
-        jFrame.setLocationRelativeTo(null);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        loginButton=new JButton("sign in");
-        loginButton.setBounds(210,150,80,30);
-        loginButton.addActionListener(this);
-        loginTextField = new JTextField();
-        loginTextField.setBounds(120,50,260,30);
-        passwordTextField = new JPasswordField();
-        passwordTextField.setBounds(120,100,260,30);
-        loginLabel = new JLabel("login:");
-        loginLabel.setBounds(80,50,80,30);
-        passwordLabel = new JLabel("password:");
-        passwordLabel.setBounds(50,100,80,30);
-        jFrame.add(loginButton);
-        jFrame.add(loginTextField);
-        jFrame.add(passwordTextField);
-        jFrame.add(loginLabel);
-        jFrame.add(passwordLabel);
-        jFrame.setLayout(null);
-        jFrame.setVisible(true);
-        jFrame.setResizable(false);
     }
     public void init(){
         accounts=new LinkedList<>();
@@ -78,6 +52,32 @@ public class Gui implements ActionListener{
                 copies.add(temp.getListOfAllCopies().get(j));
             }
         }
+        loginMenu();
+    }
+    public void loginMenu(){
+        jFrame=new JFrame("login");
+        jFrame.setSize(500,250);
+        jFrame.setLocationRelativeTo(null);
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginButton=new JButton("sign in");
+        loginButton.setBounds(210,150,80,30);
+        loginButton.addActionListener(this);
+        loginTextField = new JTextField();
+        loginTextField.setBounds(120,50,260,30);
+        passwordTextField = new JPasswordField();
+        passwordTextField.setBounds(120,100,260,30);
+        loginLabel = new JLabel("login:");
+        loginLabel.setBounds(80,50,80,30);
+        passwordLabel = new JLabel("password:");
+        passwordLabel.setBounds(50,100,80,30);
+        jFrame.add(loginButton);
+        jFrame.add(loginTextField);
+        jFrame.add(passwordTextField);
+        jFrame.add(loginLabel);
+        jFrame.add(passwordLabel);
+        jFrame.setLayout(null);
+        jFrame.setVisible(true);
+        jFrame.setResizable(false);
     }
 
     @Override
