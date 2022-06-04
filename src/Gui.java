@@ -55,6 +55,10 @@ public class Gui implements ActionListener{
         loginMenu();
     }
     public void loginMenu(){
+        if(jFrame!=null) {
+            jFrame.dispose();
+            jFrame.removeAll();
+        }
         jFrame=new JFrame("login");
         jFrame.setSize(500,250);
         jFrame.setLocationRelativeTo(null);
@@ -255,7 +259,6 @@ public class Gui implements ActionListener{
         jFrame.add(searchTitleLabel);
         jFrame.add(searchTitleTextField);
         jFrame.add(searchTitleButton);
-
     }
 
     public void searchTitleMenu(){
