@@ -24,7 +24,7 @@ public class Gui implements ActionListener{
         jFrame=new JFrame("login");
         jFrame.setSize(500,250);
         jFrame.setLocationRelativeTo(null);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);;
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         loginButton=new JButton("sign in");
         loginButton.setBounds(210,150,80,30);
         loginButton.addActionListener(this);
@@ -134,6 +134,15 @@ public class Gui implements ActionListener{
         else if(e.getSource()==backAdminMenuButton){
             adminMenu();
         }
+        else if(e.getSource()==backUserMenuButton){
+            userMenu();
+        }
+        else if(e.getSource()==backSearchMenuButton){
+            searchMenu();
+        }
+        else if(e.getSource()==backLoginButton){
+            loginMenu();
+        }
     }
     public void userMenu(){
         jFrame.dispose();
@@ -151,9 +160,14 @@ public class Gui implements ActionListener{
         reserveBookButton=new JButton("reserve a book");
         reserveBookButton.setBounds(485,75,160,50);
         reserveBookButton.addActionListener(this);
+        backLoginButton = new JButton("back");
+        backLoginButton.setBounds(550, 150, 80, 30);
+        backLoginButton.addActionListener(this);
+
         jFrame.add(searchBookButton);
         jFrame.add(myBooksButton);
         jFrame.add(reserveBookButton);
+        jFrame.add(backLoginButton);
         jFrame.setLayout(null);
         jFrame.setVisible(true);
         jFrame.setResizable(false);
@@ -180,12 +194,16 @@ public class Gui implements ActionListener{
         searchBookButton=new JButton("search a book");
         searchBookButton.setBounds(10,100,150,50);
         searchBookButton.addActionListener(this);
+        backLoginButton = new JButton("back");
+        backLoginButton.setBounds(550, 150, 80, 30);
+        backLoginButton.addActionListener(this);
 
         jFrame.add(addBookButton);
         jFrame.add(deleteBookButton);
         jFrame.add(lendUserBookButton);
         jFrame.add(getBookFromUserButton);
         jFrame.add(searchBookButton);
+        jFrame.add(backLoginButton);
         jFrame.setLayout(null);
         jFrame.setVisible(true);
         jFrame.setResizable(false);
@@ -217,9 +235,21 @@ public class Gui implements ActionListener{
         searchTitleButton=new JButton("search");
         searchTitleButton.setBounds(290,200,80,30);
         searchTitleButton.addActionListener(this);
+        if(user == null) {
+            backAdminMenuButton = new JButton("back");
+            backAdminMenuButton.setBounds(550, 200, 80, 30);
+            backAdminMenuButton.addActionListener(this);
+            jFrame.add(backAdminMenuButton);
+        } else if(admin == null){
+            backUserMenuButton = new JButton("back");
+            backUserMenuButton.setBounds(550, 200, 80, 30);
+            backUserMenuButton.addActionListener(this);
+            jFrame.add(backUserMenuButton);
+        }
         jFrame.add(searchTitleLabel);
         jFrame.add(searchTitleTextField);
         jFrame.add(searchTitleButton);
+
     }
 
     public void searchTitleMenu(){
@@ -305,6 +335,11 @@ public class Gui implements ActionListener{
         reserveButton=new JButton("reserve");
         reserveButton.setBounds(30,200,80,30);
         reserveButton.addActionListener(this);
+        backUserMenuButton = new JButton("back");
+        backUserMenuButton.setBounds(550, 200, 80, 30);
+        backUserMenuButton.addActionListener(this);
+
+        jFrame.add(backUserMenuButton);
         jFrame.add(reserveButton);
     }
     public void reserveBook(){
