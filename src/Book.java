@@ -30,6 +30,9 @@ public class Book {
         numberOfAllCopies++;
         listOfAllCopies.add(new Copy(author, title, isbn, numberOfAllCopies, CopyStatus.AVAILABLE));
     }
+    public void deleteCopy(Copy copy){
+        listOfAllCopies.remove(copy);
+    }
     public Author getAuthor() {
         return author;
     }

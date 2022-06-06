@@ -7,7 +7,7 @@ import java.util.LinkedList;
 public class Gui implements ActionListener{
     private Catalog catalog;
     private JFrame jFrame;
-    private JButton loginButton, searchBookButton, myBooksButton, reserveBookButton, addBookButton, deleteBookButton, lendUserBookButton, getBookFromUserButton, searchTitleButton, addButton, reserveButton, lendButton, backLoginButton, backAdminMenuButton, backUserMenuButton, backSearchMenuButton;
+    private JButton loginButton, searchBookButton, myBooksButton, reserveBookButton, addBookButton, deleteBookButton, lendUserBookButton, getBookFromUserButton, searchTitleButton, addButton, deleteButton, reserveButton, lendButton, backLoginButton, backAdminMenuButton, backUserMenuButton, backSearchMenuButton;
     private JTextField loginTextField, passwordTextField, searchTitleTextField, addAuthorTextField, addTitleTextField, addISBNTextField;
     private JLabel loginLabel, passwordLabel, addAuthorLabel, addTitleLabel, addISBNLabel;
     private JTable jTable;
@@ -45,13 +45,7 @@ public class Gui implements ActionListener{
             catalog.getListOfAllBooks().get(i).addCopy();
             catalog.getListOfAllBooks().get(i).addCopy();
         }
-        copies=new LinkedList<>();
-        for(int i=0;i<catalog.getListOfAllBooks().size();i++){
-            Book temp=catalog.getListOfAllBooks().get(i);
-            for(int j=0;j<temp.getListOfAllCopies().size();j++){
-                copies.add(temp.getListOfAllCopies().get(j));
-            }
-        }
+
         loginMenu();
     }
     public void loginMenu(){
@@ -104,7 +98,7 @@ public class Gui implements ActionListener{
             searchMenu();
         }
         else if(e.getSource()==myBooksButton){
-
+            myBooksMenu();
         }
         else if(e.getSource()==reserveBookButton){
             reserveBookMenu();
@@ -113,7 +107,7 @@ public class Gui implements ActionListener{
             addBookMenu();
         }
         else if(e.getSource()==deleteBookButton){
-
+            deleteBookMenu();
         }
         else if(e.getSource()==lendUserBookButton){
             lendUserBookMenu();
@@ -128,6 +122,9 @@ public class Gui implements ActionListener{
             catalog.getListOfAllBooks().add(new Book(addTitleTextField.getText(),Integer.parseInt(addISBNTextField.getText()),new Author(addAuthorTextField.getText())));
             catalog.getListOfAllBooks().get(catalog.getListOfAllBooks().size()-1).addCopy();
             addBookMenu();
+        }
+        else if(e.getSource()==deleteButton){
+            deleteBook();
         }
         else if(e.getSource()==reserveButton){
             reserveBook();
@@ -195,7 +192,7 @@ public class Gui implements ActionListener{
         getBookFromUserButton=new JButton("get a book");
         getBookFromUserButton.setBounds(520,30,150,50);
         getBookFromUserButton.addActionListener(this);
-        searchBookButton=new JButton("search a book");
+        searchBookButton=new JButton("search for a book");
         searchBookButton.setBounds(10,100,150,50);
         searchBookButton.addActionListener(this);
         backLoginButton = new JButton("back");
@@ -214,6 +211,7 @@ public class Gui implements ActionListener{
     }
 
     public void displayBooks(){
+        copies = new LinkedList<>();
         for(int i=0;i<catalog.getListOfAllBooks().size();i++){
             Book temp=catalog.getListOfAllBooks().get(i);
             for(int j=0;j<temp.getListOfAllCopies().size();j++){
@@ -338,6 +336,30 @@ public class Gui implements ActionListener{
         jFrame.add(addISBNTextField);
         jFrame.add(addButton);
     }
+    public void deleteBookMenu(){
+        displayBooks();
+        jFrame.resize(700,300);
+        deleteButton=new JButton("delete");
+        deleteButton.setBounds(30,200,80,30);
+        deleteButton.addActionListener(this);
+        backAdminMenuButton = new JButton("back");
+        backAdminMenuButton.setBounds(550, 200, 80, 30);
+        backAdminMenuButton.addActionListener(this);
+
+        jFrame.add(backAdminMenuButton);
+        jFrame.add(deleteButton);
+    }
+    public void deleteBook(){
+        Copy copy = copies.get(jTable.getSelectedRow());
+        for(int i=0; i<catalog.getListOfAllBooks().size(); i++){
+            Book temp = catalog.getListOfAllBooks().get(i);
+            if(temp.getListOfAllCopies().contains(copy)){
+                System.out.printf("AAAA");
+                temp.deleteCopy(copy);
+                deleteBookMenu();
+            }
+        }
+    }
     public void reserveBookMenu(){
         displayBooks();
         jFrame.resize(700,300);
@@ -386,5 +408,37 @@ public class Gui implements ActionListener{
                 }
             }
         }
+    }
+    public void myBooksMenu(){
+        LinkedList<Copy> loanedBooks = user.getMyBooks();
+        LinkedList<Copy> reservedBooks = user.getReserveMyBooks();
+        Object[][] rows = new Object[loanedBooks.size()+reservedBooks.size()][];
+        Object[] row;
+        for(int i=0;i<loanedBooks.size();i++){
+            row = new Object[5];
+            row[0] = loanedBooks.get(i).getAuthor().getName();
+            row[1] = loanedBooks.get(i).getTitle();
+            row[2] = loanedBooks.get(i).getIsbn();
+            row[3] = loanedBooks.get(i).getId();
+            row[4] = loanedBooks.get(i).getStatus();
+            rows[i] = row;
+        }
+
+        for(int i=0;i<reservedBooks.size();i++){
+            row = new Object[5];
+            row[0] = reservedBooks.get(i).getAuthor().getName();
+            row[1] = reservedBooks.get(i).getTitle();
+            row[2] = reservedBooks.get(i).getIsbn();
+            row[3] = reservedBooks.get(i).getId();
+            row[4] = reservedBooks.get(i).getStatus();
+            rows[i] = row;
+        }
+
+        String[] column= {"Author","Title","ISBN", "ID", "Status"};
+        setJTable(rows,column);
+        backUserMenuButton= new JButton("back");
+        backUserMenuButton.setBounds(550, 200, 80, 30);
+        backUserMenuButton.addActionListener(this);
+        jFrame.add(backUserMenuButton);
     }
 }
