@@ -7,7 +7,7 @@ import java.util.LinkedList;
 public class Gui implements ActionListener{
     private Catalog catalog;
     private JFrame jFrame;
-    private JButton loginButton, searchBookButton, myBooksButton, reserveBookButton, addBookButton, deleteBookButton, lendUserBookButton, getBookFromUserButton, searchTitleButton, addButton, deleteButton, reserveButton, lendButton, backLoginButton, backAdminMenuButton, backUserMenuButton, backSearchMenuButton;
+    private JButton loginButton, searchBookButton, myBooksButton, reserveBookButton, addBookButton, deleteBookButton, lendUserBookButton, getBookFromUserButton, searchTitleButton, addButton, deleteButton, reserveButton, lendButton, backLoginButton, backAdminMenuButton, backUserMenuButton, backSearchMenuButton, getBookButton;
     private JTextField loginTextField, passwordTextField, searchTitleTextField, addAuthorTextField, addTitleTextField, addISBNTextField;
     private JLabel loginLabel, passwordLabel, addAuthorLabel, addTitleLabel, addISBNLabel;
     private JTable jTable;
@@ -113,7 +113,7 @@ public class Gui implements ActionListener{
             lendUserBookMenu();
         }
         else if(e.getSource()==getBookFromUserButton){
-
+            getABookMenu();
         }
         else if(e.getSource()==searchTitleButton){
             searchTitleMenu();
@@ -144,6 +144,10 @@ public class Gui implements ActionListener{
         else if(e.getSource()==backLoginButton){
             loginMenu();
         }
+        else if(e.getSource()==getBookButton){
+            getBook();
+        }
+
     }
     public void userMenu(){
         jFrame.dispose();
@@ -354,7 +358,6 @@ public class Gui implements ActionListener{
         for(int i=0; i<catalog.getListOfAllBooks().size(); i++){
             Book temp = catalog.getListOfAllBooks().get(i);
             if(temp.getListOfAllCopies().contains(copy)){
-                System.out.printf("AAAA");
                 temp.deleteCopy(copy);
                 deleteBookMenu();
             }
@@ -441,4 +444,57 @@ public class Gui implements ActionListener{
         backUserMenuButton.addActionListener(this);
         jFrame.add(backUserMenuButton);
     }
+
+    public void getABookMenu(){
+        LinkedList<Object[]> rowsList=new LinkedList<>();
+        Object[] row;
+        for(int i=0;i<copies.size();i++){
+            if(copies.get(i).getStatus() == CopyStatus.LOANED) {
+                row = new Object[5];
+                row[0] = copies.get(i).getAuthor().getName();
+                row[1] = copies.get(i).getTitle();
+                row[2] = copies.get(i).getIsbn();
+                row[3] = copies.get(i).getId();
+                row[4] = copies.get(i).getStatus();
+                rowsList.add(row);
+            }
+        }
+        Object[][] rowsArray = new Object[rowsList.size()][];
+        for(int i=0;i<rowsList.size();i++){
+            rowsArray[i]= rowsList.get(i);
+        }
+        String[] column= {"Author","Title","ISBN", "ID", "Status"};
+        setJTable(rowsArray,column);
+
+        jFrame.resize(700,300);
+        getBookButton=new JButton("get");
+        getBookButton.setBounds(30,200,80,30);
+        getBookButton.addActionListener(this);
+        backAdminMenuButton=new JButton("back");
+        backAdminMenuButton.setBounds(550,200,80,30);
+        backAdminMenuButton.addActionListener(this);
+        jFrame.add(backAdminMenuButton);
+        jFrame.add(getBookButton);
+    }
+    public void getBook(){
+        for(int i=0; i<accounts.size(); i++){
+            if(accounts.get(i).getAccountType()==AccountType.USER){
+                user = (User) accounts.get(i);
+                Copy copy;
+                int id = (int) jTable.getModel().getValueAt(jTable.getSelectedRow(), 3);
+                for(int j=0; j <copies.size(); j++){
+                    if(copies.get(j).getId() == id) {
+                        copy = copies.get(j);
+                        if(user.getMyBooks().contains(copy)) {
+                            user.getMyBooks().remove(copy);
+                            copy.setStatus(CopyStatus.AVAILABLE);
+                            getABookMenu();
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
 }
